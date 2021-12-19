@@ -1,0 +1,26 @@
+service:
+  name: sls-notification-service
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+custom:
+  profiles:
+    dev: slscourse
+
+provider:
+  name: aws
+  profile: ${self:custom.profiles.${sls:stage}}
+  runtime: nodejs14.x
+  region: eu-central-1
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  hello:
+    handler: src/handlers/hello.handler
+    events:
+      - http:
+          method: GET
+          path: /hello
